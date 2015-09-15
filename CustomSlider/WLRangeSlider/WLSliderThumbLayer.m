@@ -17,7 +17,7 @@
         CGContextFillPath(ctx);
         
         CGContextSetStrokeColorWithColor(ctx, shadowColor.CGColor);
-        CGContextSetLineWidth(ctx, 0.5);
+        CGContextSetLineWidth(ctx, 0.0);
         CGContextAddPath(ctx, thumbPath.CGPath);
         CGContextStrokePath(ctx);
         

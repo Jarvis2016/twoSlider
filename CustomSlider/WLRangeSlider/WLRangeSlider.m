@@ -14,7 +14,10 @@
 @property (nonatomic,strong) WLTrackLayer *trackLayer;
 @property(nonatomic,strong)JWTrackLayer*trackLayer1;
 @property (nonatomic) CGPoint previousLoction;
-
+@property (nonatomic, strong) CATextLayer *leftLabel;
+@property (nonatomic, strong) CATextLayer *rightLabel;
+@property (nonatomic, strong) CATextLayer *leftLabel1;
+@property (nonatomic, strong) CATextLayer *rightLabel1;
 @end
 
 @implementation WLRangeSlider
@@ -55,6 +58,8 @@
     _leftThumbLayer = [WLSliderThumbLayer layer];
     _leftThumbLayer.contentsScale = [UIScreen mainScreen].scale;
     _leftThumbLayer.rangeSlider = self;
+    _leftThumbLayer.borderColor=[[UIColor clearColor]CGColor];
+    _leftThumbLayer.borderWidth=0;
     [self.layer addSublayer:_leftThumbLayer];
     
     _rightThumbLayer = [WLSliderThumbLayer layer];
@@ -71,8 +76,55 @@
     _rightThumbLayer1.contentsScale=[UIScreen mainScreen].scale;
     _rightThumbLayer1.rangeSlider=self;
     [self.layer addSublayer:_rightThumbLayer1];
+    [self initLabels];
     
     [self updateLayerFrames];
+    [self updateLabelFrame];
+}
+-(void)initLabels
+{
+    //左边label   0：00
+    self.leftLabel = [[CATextLayer alloc] init];
+    self.leftLabel.alignmentMode = kCAAlignmentCenter;
+    self.leftLabel.fontSize = 10.0f;
+    self.leftLabel.frame = CGRectMake(0, -10, 40, 14);
+    self.leftLabel.contentsScale = [UIScreen mainScreen].scale;
+    self.leftLabel.contentsScale = [UIScreen mainScreen].scale;
+    self.leftLabel.string=[self changeStr:[NSString stringWithFormat:@"%f",self.leftValue]];
+    self.leftLabel.foregroundColor=[[UIColor greenColor]CGColor];
+    [self.layer addSublayer:_leftLabel];
+    //right 6:30
+    self.rightLabel=[[CATextLayer alloc]init];
+    self.rightLabel.alignmentMode=kCAAlignmentCenter;
+    self.rightLabel.fontSize=10.0f;
+    self.rightLabel.frame=CGRectMake(0, -10, 40, 14);
+    self.rightLabel.contentsScale=[UIScreen mainScreen].scale;
+    self.rightLabel.contentsScale = [UIScreen mainScreen].scale;
+    self.rightLabel.string=[self changeStr:[NSString stringWithFormat:@"%f",self.rightValue]];
+    self.rightLabel.foregroundColor=[[UIColor greenColor]CGColor];
+    [self.layer addSublayer:_rightLabel];
+    //left 1  21:00
+    self.leftLabel1 = [[CATextLayer alloc] init];
+    self.leftLabel1.alignmentMode = kCAAlignmentCenter;
+    self.leftLabel1.fontSize = 10.0f;
+    self.leftLabel1.frame = CGRectMake(0, -10, 40, 14);
+    self.leftLabel1.contentsScale = [UIScreen mainScreen].scale;
+    self.leftLabel1.contentsScale = [UIScreen mainScreen].scale;
+    self.leftLabel1.string=[self changeStr:[NSString stringWithFormat:@"%f",self.leftValue1]];
+    self.leftLabel1.foregroundColor=[[UIColor greenColor]CGColor];
+    [self.layer addSublayer:_leftLabel1];
+    //right1  24:00
+    
+    self.rightLabel1=[[CATextLayer alloc]init];
+    self.rightLabel1.alignmentMode=kCAAlignmentCenter;
+    self.rightLabel1.fontSize=10.0f;
+    self.rightLabel1.frame=CGRectMake(0, -10, 40, 14);
+    self.rightLabel1.contentsScale=[UIScreen mainScreen].scale;
+    self.rightLabel1.contentsScale = [UIScreen mainScreen].scale;
+    self.rightLabel1.string=[self changeStr:[NSString stringWithFormat:@"%f",self.rightValue1]];
+    self.rightLabel1.foregroundColor=[[UIColor greenColor]CGColor];
+    [self.layer addSublayer:_rightLabel1];
+
 }
 
 #pragma mark - Setters
@@ -90,21 +142,33 @@
 - (void)setLeftValue:(CGFloat)leftValue{
     _leftValue = leftValue;
     [self updateLayerFrames];
+    [self updateLabelFrame];
+    self.leftLabel.string=[self changeStr:[NSString stringWithFormat:@"%f",self.leftValue]];
+   
 }
 //second control
 -(void)setLeftValue1:(CGFloat)leftValue1
 {
     _leftValue1=leftValue1;
     [self updateLayerFrames];
+    [self updateLabelFrame];
+    self.leftLabel1.string=[self changeStr:[NSString stringWithFormat:@"%f",self.leftValue1]];
 }
 -(void)setRightValue1:(CGFloat)rightValue1
 {
     _rightValue1=rightValue1;
     [self updateLayerFrames];
+    [self updateLabelFrame];
+    
+    self.rightLabel1.string=[self changeStr:[NSString stringWithFormat:@"%f",self.rightValue1]];
+   
+
 }
 - (void)setRightValue:(CGFloat)rightValue{
     _rightValue = rightValue;
     [self updateLayerFrames];
+    [self updateLabelFrame];
+    self.rightLabel.string=[self changeStr:[NSString stringWithFormat:@"%f",self.rightValue]];
 }
 
 - (void)setThumbColor:(UIColor *)thumbColor{
@@ -171,6 +235,23 @@
     
     
     [CATransaction commit];
+}
+-(void)updateLabelFrame
+{
+    CGPoint left=CGPointMake(CGRectGetMidX(_leftThumbLayer.frame), -10);
+    
+    self.leftLabel.position=left;
+    self.rightLabel.position=CGPointMake(CGRectGetMidX(_rightThumbLayer.frame), -10);
+    
+    self.leftLabel1.position=CGPointMake(CGRectGetMidX(_leftThumbLayer1.frame), -10);
+    self.rightLabel1.position=CGPointMake(CGRectGetMidX(_rightThumbLayer1.frame), -10);
+    
+    if (CGRectIntersectsRect(self.leftLabel.frame, self.rightLabel.frame)||CGRectIntersectsRect(self.rightLabel.frame, self.leftLabel1.frame)) {
+        self.rightLabel.position=CGPointMake(CGRectGetMidX(_rightThumbLayer.frame), -19);
+    }
+    if (CGRectIntersectsRect(self.leftLabel1.frame, self.rightLabel1.frame)){
+        self.rightLabel1.position=CGPointMake(CGRectGetMidX(_rightThumbLayer1.frame), -19);
+    }
 }
 
 - (CGFloat)positionForValue:(CGFloat)value{
@@ -299,5 +380,42 @@
     _leftThumbLayer1.highlighted=NO;
     _rightThumbLayer1.highlighted=NO;
 }
+#pragma mark StrChanged
+-(NSString*)changeStr:(NSString*)myStr
+{
+    NSString*str=nil;
+    NSString*fenStr=[NSString stringWithFormat:@"0.%@",[myStr componentsSeparatedByString:@"."][1]];
+    NSString*fen=[self notRounding:[fenStr floatValue]*60  afterPoint:0];
+    
+    
+    if ([fen substringFromIndex:1]==nil||[[fen substringFromIndex:1]isEqualToString:@""]) {
+        fen=[NSString stringWithFormat:@"0%@",fen];
+    }
+    
+    str=[NSString stringWithFormat:@"%@:%@",[NSString stringWithFormat:@"%@",[myStr componentsSeparatedByString:@"."][0]],fen];
+    NSLog(@"str--%@",str);
+    return str;
+}
+
+-(NSString *)notRounding:(float)price afterPoint:(int)position{
+    
+    NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundDown scale:position raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
+    
+    NSDecimalNumber *ouncesDecimal;
+    
+    NSDecimalNumber *roundedOunces;
+    
+    
+    
+    ouncesDecimal = [[NSDecimalNumber alloc] initWithFloat:price];
+    
+    roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
+    
+    
+    
+    return [NSString stringWithFormat:@"%@",roundedOunces];
+    
+}
+
 
 @end

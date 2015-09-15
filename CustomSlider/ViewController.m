@@ -14,14 +14,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _rangeSlider = [[WLRangeSlider alloc] initWithFrame:CGRectMake(0, 100, 320, 10)];
+    _rangeSlider = [[WLRangeSlider alloc] initWithFrame:CGRectMake(20, 100,280, 15)];
     [_rangeSlider addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
+    _rangeSlider.layer.borderColor=[[UIColor clearColor]CGColor];
     [self.view addSubview:_rangeSlider];
     UISwitch *defaultSwitch = [[UISwitch alloc] init];
     [defaultSwitch addTarget:self action:@selector(switchCornorRadius:) forControlEvents:UIControlEventValueChanged];
     defaultSwitch.center = self.view.center;
     defaultSwitch.on = YES;
     [self.view addSubview:defaultSwitch];
+    [self valueChanged:_rangeSlider];
     
    
 }

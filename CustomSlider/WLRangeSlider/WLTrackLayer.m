@@ -9,7 +9,7 @@
 
 - (void)drawInContext:(CGContextRef)ctx{
     if (_rangeSlider) {
-        CGFloat cornorRadius = CGRectGetHeight(self.bounds) * _rangeSlider.cornorRadiusScale / 2.0;
+        CGFloat cornorRadius = CGRectGetHeight(self.bounds) * _rangeSlider.cornorRadiusScale/2;
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:cornorRadius];
         CGContextAddPath(ctx, path.CGPath);
         
