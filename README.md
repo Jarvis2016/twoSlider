@@ -1,6 +1,7 @@
 # twoSlider
 双向滚动slider
-<pre><code>- (void)viewDidLoad
+```javascript
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     _rangeSlider = [[WLRangeSlider alloc] initWithFrame:CGRectMake(0, 100, 320, 10)];
@@ -25,8 +26,7 @@ in the methord    - (void)initLayers
     - (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
     - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
     - (void)cancelTrackingWithEvent:(UIEvent *)event
-</code></pre>
-
+```
 
     
     
